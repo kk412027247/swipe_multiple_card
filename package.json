@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "compile-web": "./node_modules/.bin/webpack-dev-server -d --config ./web/webpack.config.js --inline --hot --colors",
+    "build-web": "./node_modules/.bin/webpack -p --config ./web/webpack.config.js"
   },
   "dependencies": {
-    "babel-plugin-react-native-web": "^0.8.9",
     "native-base": "^2.8.0",
     "react": "^16.4.2",
     "react-art": "^16.5.0",
@@ -16,6 +17,7 @@
     "react-native-web": "^0.8.9"
   },
   "devDependencies": {
+    "babel-plugin-react-native-web": "^0.8.9",
     "babel-jest": "23.4.2",
     "babel-loader": "^8.0.2",
     "babel-preset-react-native": "^5",
