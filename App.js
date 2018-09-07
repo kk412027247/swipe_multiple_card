@@ -1,49 +1,47 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+//https://medium.com/@andi.gu.ca/exploring-react-natives-panresponder-and-layoutanimation-dde77e7f4cc9
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import React, {Component} from "react";
+import {LayoutAnimation, UIManager} from 'react-native';
+import {Body, Container, Header, Title, View} from "native-base";
+import {SwipableCard} from "./SwipableCard";
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class PanResponderDemo extends Component {
+  titles = new Array(10).fill(null).map((_, i) => `Card #${i}`);
+  state = {
+    closedIndices: []
+  };
+
+  constructor(props) {
+    super(props);
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    this.shouldRender = this.shouldRender.bind(this);
+  }
+
+  shouldRender(index) {
+    return this.state.closedIndices.indexOf(index) === -1
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+      <Container>
+        <Header>
+          <Body>
+          <Title>
+            Pan Responder Demo
+          </Title>
+          </Body>
+        </Header>
+        {this.titles.map((title, i) => this.shouldRender(i) &&
+          <View key={i}><SwipableCard title={title} onDismiss={() => {
+            if ([...new Array(this.titles.length)].slice(i + 1, this.titles.length).some(this.shouldRender)) {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+            }
+            this.setState({
+              closedIndices: [...this.state.closedIndices, i]
+            })
+          }}/></View>)}
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
