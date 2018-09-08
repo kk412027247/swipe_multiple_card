@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Button, LayoutAnimation, NativeModules} from 'react-native';
+import {View, StyleSheet, Button, LayoutAnimation, NativeModules, Platform} from 'react-native';
 import Card from './card';
 
 
@@ -13,9 +13,9 @@ class CardGroup extends React.Component{
 
   state={
     data:[
-      {title:'title_1',content:'content_1'},
-      {title:'title_2',content:'content_2'},
-      {title:'title_3',content:'content_3'},
+      {title:'title_1',content:'content_1',backgroundColor:'#ff81cc'},
+      {title:'title_2',content:'content_2',backgroundColor:'#bcffa9'},
+      {title:'title_3',content:'content_3',backgroundColor:'#a899ff'},
     ]
   } ;
 
@@ -52,23 +52,31 @@ class CardGroup extends React.Component{
   //   console.log(this.state.data)
   // }
 
+  componentWillMount(){
+    if(Platform.OS === 'android'){
+      this.setState({data: this.state.data.reverse()})
+    }
+    
+  }
+
   render(){
     return(
       <View style={styles.container}>
         {
-          this.state.data.map((item,index)=>{
+          this.state.data.map((item,index, arr)=>{
             return (
               <Card
                 title={item.title}
                 content={item.content}
                 key={item.title}
-                top={index*50}
-                left={index*50}
+                top={Platform.OS === 'ios' ? index*50 : (arr.length - index -1) * 50  }
+                left={Platform.OS === 'ios' ?index*50 : (arr.length - index -1) * 50 }
                 zIndex={3-index}
-                elevation={(3-index)*2}
+                elevation={index*2}
                 // scale={1/(index+1)}
-                forward={this.forward}
-                backward={this.backward}
+                forward={Platform.OS === 'ios' ? this.forward : this.backward}
+                backward={Platform.OS === 'ios' ? this.backward : this.forward}
+                backgroundColor={item.backgroundColor}
               />
             )
           })

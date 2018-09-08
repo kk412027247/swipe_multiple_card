@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, Animated, PanResponder, Dimensions} from 'react-native';
+import {Text, StyleSheet, Animated, PanResponder, Dimensions, Platform} from 'react-native';
 
 
 export default class Card extends React.Component{
@@ -7,8 +7,8 @@ export default class Card extends React.Component{
   translateX = new Animated.Value(0);
 
   _panResponder = PanResponder.create({
-    onMoveShouldSetResponderCapture: () => true,
-    onMoveShouldSetPanResponderCapture: () => true,
+    onMoveShouldSetResponderCapture: () => Platform.OS === 'ios' ? this.props.zIndex ===3 : this.props.zIndex === 1,
+    onMoveShouldSetPanResponderCapture: () => Platform.OS === 'ios' ? this.props.zIndex ===3 : this.props.zIndex === 1,
     onPanResponderMove: Animated.event([null,{dx: this.translateX}]),
     onPanResponderRelease: (e, {vx, dx}) => {
       const screenWidth = Dimensions.get("window").width;
@@ -35,13 +35,14 @@ export default class Card extends React.Component{
 
 
   render(){
-    const {title,content, top, left, zIndex, elevation, scale} = this.props;
+    const {title,content, top, left, zIndex, elevation, backgroundColor,scale} = this.props;
     const _style = [
       styles.container, {
         top,
         left,
         zIndex,
         elevation,
+        backgroundColor,
         transform:[
           // {scale:scale},
           {translateX: this.translateX}
@@ -65,7 +66,6 @@ const styles = StyleSheet.create({
   container:{
     width:200,
     height:200,
-    backgroundColor:'#ff81cc',
     alignItems:'center',
     justifyContent:'space-around',
     position:'absolute',
