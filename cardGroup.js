@@ -82,14 +82,7 @@ class CardGroup extends React.Component{
           })
         }
         <View style={styles.empty}/>
-        <Button
-          title={'forward'}
-          onPress={this.forward}
-        />
-        <Button
-          title={'backward'}
-          onPress={this.backward}
-        />
+        
       </View>
     )
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, Animated, PanResponder, Dimensions, Platform} from 'react-native';
+import {Text, StyleSheet, Animated, PanResponder, Dimensions, Platform, TouchableOpacity} from 'react-native';
 
 
 export default class Card extends React.Component{
@@ -50,13 +50,22 @@ export default class Card extends React.Component{
       }
     ];
     return(
-      <Animated.View
-        style={_style}
-        {...this._panResponder.panHandlers}
-      >
-        <Text style={styles.title}>{title}</Text>
-        <Text>{content}</Text>
-      </Animated.View>
+
+        <Animated.View
+          style={_style}
+          {...this._panResponder.panHandlers}
+        >
+          <TouchableOpacity
+            style={styles.button}
+            onPress={alert.bind(null, title)}
+          >
+            <Text style={styles.title}>{title}</Text>
+            <Text>{content}</Text>
+          </TouchableOpacity>
+
+        </Animated.View>
+      
+
     )
   }
 }
@@ -72,6 +81,12 @@ const styles = StyleSheet.create({
     shadowOffset:{width:2, height:2} ,
     shadowOpacity:.5,
     shadowRadius:2,
+  },
+  button:{
+    flex:1,
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'space-around',
   },
   title:{
     fontSize:30,
